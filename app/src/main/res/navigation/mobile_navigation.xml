@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_liste_etudiants">
+
+    <fragment
+        android:id="@+id/nav_liste_etudiants"
+        android:name="com.example.tp6.ui.fragments.ListeEtudiantsFragment"
+        android:label="Liste des étudiants">
+
+        <action
+            android:id="@+id/action_liste_to_ajout"
+            app:destination="@id/nav_ajout_etudiant" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_ajout_etudiant"
+        android:name="com.example.tp6.ui.fragments.AjoutEtudiantFragment"
+        android:label="Ajouter un étudiant">
+
+        <action
+            android:id="@+id/action_nav_ajout_etudiant_to_nav_liste_etudiants"
+            app:destination="@id/nav_liste_etudiants"
+            app:popUpTo="@id/nav_ajout_etudiant"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+</navigation>

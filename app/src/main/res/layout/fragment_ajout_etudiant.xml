@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter un étudiant"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/editTextMail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Adresse mail"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextClasse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Classe"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/buttonAjouter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter étudiant"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
