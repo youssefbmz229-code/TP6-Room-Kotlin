@@ -29,8 +29,9 @@ interface EtudiantDao {
     suspend fun update(etudiant: Etudiant)
 
     // Rechercher un étudiant par son ID
-    @Query("SELECT * FROM etudiant_table WHERE id = :id")
-    suspend fun getEtudiantById(id: Int): Etudiant?
+    // Rechercher un étudiant par son CIN
+    @Query("SELECT * FROM etudiant_table WHERE cin = :cin")
+    suspend fun getEtudiantById(cin: Int): Etudiant?
 
     @Query("SELECT * FROM etudiant_table WHERE classe LIKE '%' || :classe || '%'")
     fun searchEtudiantsByClasse(classe: String): LiveData<List<Etudiant>>

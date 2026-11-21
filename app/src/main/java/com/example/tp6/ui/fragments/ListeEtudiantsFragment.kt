@@ -21,11 +21,13 @@ import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import android.widget.EditText
 import android.widget.SearchView
-
+import com.example.tp6.data.entity.Etudiant
 class ListeEtudiantsFragment : Fragment() {
 
     private var _binding: FragmentListeEtudiantsBinding? = null
     private val binding get() = _binding!!
+
+    private var etudiantsApi: List<Etudiant> = emptyList()
 
     private lateinit var adapter: EtudiantAdapter
 
@@ -57,7 +59,7 @@ class ListeEtudiantsFragment : Fragment() {
                     .setTitle("Supprimer étudiant")
                     .setMessage("Voulez-vous vraiment supprimer ${etudiant.mail} ?")
                     .setPositiveButton("Oui") { _, _ ->
-                        viewModel.delete(etudiant)
+                        viewModel.deleteEtudiantApi(etudiant.cin)
 
                         Toast.makeText(
                             requireContext(),
@@ -90,7 +92,7 @@ class ListeEtudiantsFragment : Fragment() {
                             classe = editClasse.text.toString().trim()
                         )
 
-                        viewModel.update(nouvelEtudiant)
+                        viewModel.updateEtudiantApi(nouvelEtudiant)
 
                         Toast.makeText(
                             requireContext(),
@@ -109,8 +111,26 @@ class ListeEtudiantsFragment : Fragment() {
 
         binding.recyclerViewEtudiants.adapter = adapter
 
-        viewModel.allEtudiants.observe(viewLifecycleOwner) { etudiants ->
-            adapter.setEtudiants(etudiants)
+        viewModel.etudiants.observe(viewLifecycleOwner) { etudiants ->
+            etudiantsApi = etudiants
+
+            if (etudiants.isEmpty()) {
+                binding.recyclerViewEtudiants.visibility = View.GONE
+                binding.textError.visibility = View.VISIBLE
+                binding.textError.text = "Aucun étudiant trouvé."
+            } else {
+                binding.recyclerViewEtudiants.visibility = View.VISIBLE
+                binding.textError.visibility = View.GONE
+                adapter.setEtudiants(etudiants)
+            }
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            if (!message.isNullOrEmpty()) {
+                binding.textError.text = message
+                binding.textError.visibility = View.VISIBLE
+                binding.recyclerViewEtudiants.visibility = View.GONE
+            }
         }
         binding.buttonVersAjout.setOnClickListener {
             findNavController().navigate(R.id.action_liste_to_ajout)
@@ -132,16 +152,15 @@ class ListeEtudiantsFragment : Fragment() {
         )
     }
     private fun rechercherEtudiants(classe: String?) {
-        if (classe.isNullOrBlank()) {
-            viewModel.allEtudiants.observe(viewLifecycleOwner) { etudiants ->
-                adapter.setEtudiants(etudiants)
-            }
+        val resultat = if (classe.isNullOrBlank()) {
+            etudiantsApi
         } else {
-            viewModel.searchEtudiantsByClasse(classe)
-                .observe(viewLifecycleOwner) { etudiants ->
-                    adapter.setEtudiants(etudiants)
-                }
+            etudiantsApi.filter {
+                it.classe.contains(classe, ignoreCase = true)
+            }
         }
+
+        adapter.setEtudiants(resultat)
     }
 
     override fun onDestroyView() {

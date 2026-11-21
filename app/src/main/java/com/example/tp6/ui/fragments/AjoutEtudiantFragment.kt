@@ -43,9 +43,9 @@ class AjoutEtudiantFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonAjouter.setOnClickListener {
+
             val mail = binding.editTextMail.text.toString().trim()
             val classe = binding.editTextClasse.text.toString().trim()
-
 
             if (mail.isEmpty() || classe.isEmpty()) {
                 Toast.makeText(
@@ -53,13 +53,20 @@ class AjoutEtudiantFragment : Fragment() {
                     "Veuillez remplir tous les champs",
                     Toast.LENGTH_SHORT
                 ).show()
+
             } else {
+
                 val etudiant = Etudiant(
+                    cin = (10000000..99999999).random(),
+                    nom = "Ahmed",
+                    prenom = "Ali",
                     mail = mail,
+                    password = "123456",
                     classe = classe
                 )
 
-                viewModel.insert(etudiant)
+                viewModel.addEtudiantApi(etudiant)
+
                 findNavController().navigate(
                     R.id.action_nav_ajout_etudiant_to_nav_liste_etudiants
                 )
@@ -69,7 +76,7 @@ class AjoutEtudiantFragment : Fragment() {
 
                 Toast.makeText(
                     requireContext(),
-                    "Étudiant ajouté avec succès",
+                    "Demande d'ajout envoyée",
                     Toast.LENGTH_SHORT
                 ).show()
             }
